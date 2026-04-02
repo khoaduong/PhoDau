@@ -1,0 +1,50 @@
+.app {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app h1 {
+  color: #646cff;
+  margin-bottom: 2rem;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  padding: 0.75em 1.5em;
+  font-size: 1.1em;
+  background-color: #646cff;
+  color: white;
+  border: none;
+}
+
+.controls button:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.result {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: rgba(100, 108, 255, 0.1);
+  border-left: 4px solid #646cff;
+  text-align: left;
+  border-radius: 4px;
+}
+
+.error {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 100, 100, 0.1);
+  border-left: 4px solid #ff6464;
+  color: #ff6464;
+  text-align: left;
+  border-radius: 4px;
+}

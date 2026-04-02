@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "path": "Backend"
+    },
+    {
+      "path": "Frontend"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/bin": true,
+      "**/obj": true
+    }
+  }
+}
