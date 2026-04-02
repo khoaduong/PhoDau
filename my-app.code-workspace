@@ -13,6 +13,7 @@
       "**/node_modules": true,
       "**/bin": true,
       "**/obj": true
-    }
+    },
+    "liveServer.settings.multiRootWorkspaceName": "Backend"
   }
 }
