@@ -1,4 +1,5 @@
 using Backend.Data.Models;
+using Backend.Features.Menu;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data;
@@ -13,6 +14,8 @@ public class AppDbContext : DbContext
     public DbSet<TaskItem> Tasks { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+    public DbSet<MenuCategory> MenuCategories { get; set; } = null!;
+    public DbSet<MenuItem> MenuItems { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -30,5 +33,16 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<RefreshToken>()
             .HasIndex(rt => rt.Token)
             .IsUnique();
+
+        modelBuilder.Entity<MenuCategory>()
+            .HasKey(c => c.Id);
+
+        modelBuilder.Entity<MenuItem>()
+            .HasKey(i => i.Id);
+
+        modelBuilder.Entity<MenuCategory>()
+            .HasMany(c => c.Items)
+            .WithOne()
+            .HasForeignKey(i => i.CategoryId);
     }
 }

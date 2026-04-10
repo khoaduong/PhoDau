@@ -1,13 +1,17 @@
 using Backend.Data;
 using Backend.Features.Auth;
+using Backend.Features.Hello;
+using Backend.Features.Menu;
+using Backend.Features.Status;
 using Backend.Features.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseUrls("http://localhost:5000", "https://localhost:5001");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
@@ -19,6 +23,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<JwtTokenProvider>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TasksService>();
+builder.Services.AddScoped<MenuService>();
 
 // JWT Authentication
 var secret = builder.Configuration["JwtSettings:Secret"] ?? "your-super-secret-key-change-this-in-production-12345";
@@ -75,30 +80,41 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Serve static files from Frontend folder
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "..", "Frontend")),
-    RequestPath = ""
-});
-
-// Fallback to index.html for SPA routing
-app.MapFallbackToFile("index.html", new StaticFileOptions
-{
-    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "..", "Frontend"))
-});
-
-// Feature mappings (API routes come after static files)
+// Feature mappings
 app.MapAuthEndpoints();
 app.MapTasksEndpoints();
+app.MapHelloEndpoint();
+app.MapStatusEndpoint();
+app.MapMenuEndpoints();
+
+// Serve built Vite files when Frontend/dist exists.
+var frontendDistPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Frontend", "dist");
+if (Directory.Exists(frontendDistPath))
+{
+    var frontendDistProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(frontendDistPath);
+
+    app.UseDefaultFiles(new DefaultFilesOptions
+    {
+        FileProvider = frontendDistProvider
+    });
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = frontendDistProvider,
+        RequestPath = ""
+    });
+
+    app.MapFallbackToFile("index.html", new StaticFileOptions
+    {
+        FileProvider = frontendDistProvider
+    });
+}
 
 // Ensure database is created and seeded
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 
     var authService = scope.ServiceProvider.GetRequiredService<AuthService>();
 
@@ -107,6 +123,31 @@ using (var scope = app.Services.CreateScope())
         // seed demo users
         authService.CreateUserAsync("admin", "admin123", "Admin").GetAwaiter().GetResult();
         authService.CreateUserAsync("demo", "password123", "User").GetAwaiter().GetResult();
+    }
+}
+
+// Development-only menu seed
+if (app.Environment.IsDevelopment())
+{
+    using var menuSeedScope = app.Services.CreateScope();
+    var menuSeedDb = menuSeedScope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    if (!menuSeedDb.MenuCategories.Any())
+    {
+        var phoId = Guid.NewGuid().ToString();
+        var pho = new MenuCategory
+        {
+            Id = phoId,
+            Name = "Pho",
+            Items =
+            [
+                new MenuItem { Id = Guid.NewGuid().ToString(), CategoryId = phoId, Name = "Pho Tai", Description = "Rare beef noodle soup", Price = 15.5m },
+                new MenuItem { Id = Guid.NewGuid().ToString(), CategoryId = phoId, Name = "Pho Chin", Description = "Well-done beef noodle soup", Price = 16.0m }
+            ]
+        };
+
+        menuSeedDb.MenuCategories.Add(pho);
+        menuSeedDb.SaveChanges();
     }
 }
 
