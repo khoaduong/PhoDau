@@ -1,71 +1,16 @@
-# React + Vite Frontend
+# React + Vite
 
-Modern React frontend with Vite build tooling, optimized for development and production.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Features
+Currently, two official plugins are available:
 
-- **React 18** — Latest version with hooks and concurrent features
-- **Vite** — Lightning-fast build tool and dev server
-- **Axios** — HTTP client for API calls
-- **Proxy** — Dev server proxies `/api` to backend (http://localhost:5000)
-- **ESLint** — Linting support
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Quick Start
+## React Compiler
 
-### Install Dependencies
-```bash
-npm install
-```
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### Development
-```bash
-npm run dev
-```
-Starts Vite dev server at `http://localhost:5173`
+## Expanding the ESLint configuration
 
-Dev server proxies `/api/*` calls to the backend at `http://localhost:5000`.
-
-### Build
-```bash
-npm run build
-```
-Outputs optimized production build to `dist/`
-
-### Preview Production Build
-```bash
-npm run preview
-```
-
-## Project Structure
-
-```
-Frontend/
-├── src/
-│   ├── main.jsx           (Entry point)
-│   ├── App.jsx            (Root component)
-│   ├── App.css            (Component styles)
-│   └── index.css          (Global styles)
-├── public/                (Static assets)
-├── index.html             (HTML template)
-├── vite.config.js         (Vite configuration)
-├── package.json           (Dependencies)
-└── .gitignore
-```
-
-## API Integration
-
-The dev server proxies API calls:
-- Local request: `GET /api/hello`
-- Forwarded to: `http://localhost:5000/api/hello`
-
-## ESLint
-
-```bash
-npm run lint
-```
-
-## Notes
-
-- Vite dev server runs on port 5173 (configured in `vite.config.js`)
-- Backend must run on port 5000 for proxy to work
-- Build output goes to `dist/` folder
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
