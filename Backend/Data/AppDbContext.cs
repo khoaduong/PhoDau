@@ -1,6 +1,7 @@
 using Backend.Data.Models;
 using Backend.Features.Menu;
 using Microsoft.EntityFrameworkCore;
+using Backend.Features.Orders;
 
 namespace Backend.Data;
 
@@ -16,6 +17,8 @@ public class AppDbContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
     public DbSet<MenuCategory> MenuCategories { get; set; } = null!;
     public DbSet<MenuItem> MenuItems { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

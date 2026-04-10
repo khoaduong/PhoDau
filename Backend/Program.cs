@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Backend.Features.Orders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ builder.Services.AddSingleton<JwtTokenProvider>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TasksService>();
 builder.Services.AddScoped<MenuService>();
+builder.Services.AddScoped<OrdersService>();
 
 // JWT Authentication
 var secret = builder.Configuration["JwtSettings:Secret"] ?? "your-super-secret-key-change-this-in-production-12345";
@@ -86,6 +88,7 @@ app.MapTasksEndpoints();
 app.MapHelloEndpoint();
 app.MapStatusEndpoint();
 app.MapMenuEndpoints();
+app.MapOrdersEndpoints();
 
 // Serve built Vite files when Frontend/dist exists.
 var frontendDistPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Frontend", "dist");
