@@ -9,10 +9,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Backend.Features.Orders;
+using Stripe;
+
+using Backend.Features.Payments;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+StripeConfiguration.ApiKey =
+    builder.Configuration["Stripe:SecretKey"];
+
+
 builder.WebHost.UseUrls("http://localhost:5000", "https://localhost:5001");
+
+builder.Services.AddScoped<PaymentService>();
+
+app.MapPaymentsEndpoints();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
