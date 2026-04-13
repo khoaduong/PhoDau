@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Backend.Features.Hello;
 
-public static class HelloEndpoint
+public static class HelloEndpoints
 {
-    public static void MapHelloEndpoint(this WebApplication app)
+    public static void MapHelloEndpoints(this WebApplication app)
     {
         app.MapGet("/api/hello", GetHello)
             .WithName("GetHello")

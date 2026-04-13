@@ -2,31 +2,22 @@ using Backend.Data;
 using Backend.Features.Auth;
 using Backend.Features.Hello;
 using Backend.Features.Menu;
+using Backend.Features.Orders;
+using Backend.Features.Payments;
 using Backend.Features.Status;
 using Backend.Features.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Backend.Features.Orders;
 using Stripe;
-
-using Backend.Features.Payments;
-
-
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 StripeConfiguration.ApiKey =
     builder.Configuration["Stripe:SecretKey"];
 
-
 builder.WebHost.UseUrls("http://localhost:5000", "https://localhost:5001");
-
-builder.Services.AddScoped<PaymentService>();
-
-app.MapPaymentsEndpoints();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
@@ -40,6 +31,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TasksService>();
 builder.Services.AddScoped<MenuService>();
 builder.Services.AddScoped<OrdersService>();
+builder.Services.AddScoped<PaymentService>();
 
 // JWT Authentication
 var secret = builder.Configuration["JwtSettings:Secret"] ?? "your-super-secret-key-change-this-in-production-12345";
@@ -88,8 +80,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors();
 
 // Authentication & Authorization middleware (must be before MapEndpoints)
@@ -99,10 +89,11 @@ app.UseAuthorization();
 // Feature mappings
 app.MapAuthEndpoints();
 app.MapTasksEndpoints();
-app.MapHelloEndpoint();
-app.MapStatusEndpoint();
+app.MapHelloEndpoints();
+app.MapStatusEndpoints();
 app.MapMenuEndpoints();
 app.MapOrdersEndpoints();
+app.MapPaymentsEndpoints();
 
 // Serve built Vite files when Frontend/dist exists.
 var frontendDistPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Frontend", "dist");

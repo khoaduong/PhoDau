@@ -3,10 +3,19 @@ bin/
 obj/
 *.user
 *.suo
+app.db
+app.db-shm
+app.db-wal
 
 # Frontend
 node_modules/
 dist/
+*.local
+
+# Environment files
+.env
+.env.*
+!.env.example
 
 # VS Code
 .vscode/

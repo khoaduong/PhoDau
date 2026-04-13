@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Backend.Features.Status;
 
-public static class StatusEndpoint
+public static class StatusEndpoints
 {
-    public static void MapStatusEndpoint(this WebApplication app)
+    public static void MapStatusEndpoints(this WebApplication app)
     {
         app.MapGet("/api/status", GetStatus)
             .WithName("GetStatus")

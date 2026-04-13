@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
+import { fetchMenu } from './api/menuApi'
 import './App.css'
-import { menuService } from './services/menuService'
 
 function App() {
   const [menu, setMenu] = useState([])
@@ -15,13 +15,8 @@ function App() {
         setLoading(true)
         setError('')
 
-        const { data, error: serviceError } = await menuService.getMenu(controller.signal)
-
-        if (serviceError) {
-          throw new Error(serviceError)
-        }
-
-        setMenu(Array.isArray(data) ? data : [])
+          const data = await fetchMenu(controller.signal)
+          setMenu(Array.isArray(data) ? data : [])
       } catch (err) {
         if (err.name !== 'AbortError') {
           setError(err.message || 'Unable to connect to backend API')

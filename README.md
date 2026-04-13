@@ -1,4 +1,4 @@
-# My App — ASP.NET Core Backend + React Frontend
+# PhoDau — ASP.NET Core Backend + React Frontend
 
 ## Architecture
 
@@ -9,7 +9,7 @@
 - Swagger/OpenAPI documentation
 
 **Frontend** (React + Vite)
-- Modern React 18 with Hooks
+- React 19 with Hooks
 - Vite dev server with hot reload
 - API proxy to backend during development
 - Production build to `dist/`
@@ -17,7 +17,7 @@
 ## Project Structure
 
 ```
-my-app/
+PhoDau/
 ├── Backend/
 │   ├── Features/          (Feature-based endpoints)
 │   ├── Data/              (Repositories, models)
@@ -53,7 +53,7 @@ cd Frontend
 npm install
 npm run dev
 # App: http://localhost:5173
-# Dev proxy: /api/* → http://localhost:5000
+# API default: http://localhost:5000 (configurable via VITE_API_BASE_URL)
 ```
 
 ## API Endpoints
@@ -72,8 +72,8 @@ npm run dev
 - Swagger/OpenAPI support
 
 **Frontend**
-- React 18 with React Hooks
-- Axios HTTP client
+- React 19 with React Hooks
+- Fetch-based API modules in `src/api/`
 - Dev server with API proxy
 - ESLint ready
 - Production-ready build

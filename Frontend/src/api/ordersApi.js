@@ -1,10 +1,12 @@
-export async function submitOrder(order) {
-  const res = await fetch("https://localhost:5001/api/orders", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(order)
-  });
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000'
 
-  if (!res.ok) throw new Error("Order failed");
-  return res.json();
+export async function submitOrder(order) {
+  const response = await fetch(`${API_BASE}/api/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order),
+  })
+
+  if (!response.ok) throw new Error(`Order failed (${response.status})`)
+  return response.json()
 }
